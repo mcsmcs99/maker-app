@@ -1,0 +1,11 @@
+.vscode
+.git
+.gitattributes
+.env*
+.gitignore
+.editorconfig
+.quasar
+dist
+node_modules
+docker-compose.yml
+README.md

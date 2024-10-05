@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  woortex-portal:
+    container_name: maker-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./:/usr/src/app

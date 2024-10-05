@@ -14,6 +14,14 @@ const { configure } = require('quasar/wrappers');
 const path = require('path');
 
 module.exports = configure((/* ctx */) => ({
+  eslint: {
+    // fix: true,
+    // include: [],
+    // exclude: [],
+    // rawOptions: {},
+    warnings: true,
+    errors: true
+  },
   // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
   // preFetch: true,
 
@@ -51,7 +59,7 @@ module.exports = configure((/* ctx */) => ({
       node: 'node20',
     },
 
-    vueRouterMode: 'hash', // available values: 'hash', 'history'
+    vueRouterMode: 'history', // available values: 'hash', 'history'
     // vueRouterBase,
     // vueDevtools,
     // vueOptionsAPI: false,
@@ -60,7 +68,7 @@ module.exports = configure((/* ctx */) => ({
 
     // publicPath: '/',
     // analyze: true,
-    // env: {},
+    env: require('dotenv').config().parsed,
     // rawDefine: {}
     // ignorePublicFolder: true,
     // minify: false,
@@ -81,12 +89,7 @@ module.exports = configure((/* ctx */) => ({
 
         // you need to set i18n resource including paths !
         include: path.resolve(__dirname, './src/i18n/**'),
-      }],
-      ['vite-plugin-checker', {
-        eslint: {
-          lintCommand: 'eslint "./**/*.{js,mjs,cjs,vue}"',
-        },
-      }, { server: false }],
+      }]
     ],
   },
 
@@ -94,6 +97,15 @@ module.exports = configure((/* ctx */) => ({
   devServer: {
     // https: true
     open: true, // opens browser window automatically
+    port: process.env.PORT,
+    proxy: {
+      // with options
+      '/makerBackEnd': {
+        target: process.env.BACK_END_BASE_URL,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/makerBackEnd/, ''),
+      },
+    },
   },
 
   // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
@@ -101,7 +113,7 @@ module.exports = configure((/* ctx */) => ({
     config: {},
 
     // iconSet: 'material-icons', // Quasar icon set
-    // lang: 'en-US', // Quasar language pack
+    lang: 'pt-BR', // Quasar language pack
 
     // For special cases outside of where the auto-import strategy can have an impact
     // (like functional components as one of the examples),
