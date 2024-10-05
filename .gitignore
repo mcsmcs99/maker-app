@@ -32,3 +32,9 @@ yarn-error.log*
 # local .env files
 **.env
 .docker
+
+# Ignorar o arquivo de configuração do ESLint
+.eslintrc.cjs
+
+# Ignorar o arquivo de configuração Yarn
+yarn.lock
