@@ -36,5 +36,5 @@ yarn-error.log*
 # Ignorar o arquivo de configuração do ESLint
 .eslintrc.cjs
 
-# Ignorar o arquivo de configuração Yarn
+# Ignorar o arquivo de configuração Yarn.lock
 yarn.lock
