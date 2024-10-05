@@ -20,7 +20,7 @@ module.exports = configure((/* ctx */) => ({
     // exclude: [],
     // rawOptions: {},
     warnings: true,
-    errors: true
+    errors: true,
   },
   // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
   // preFetch: true,
@@ -89,7 +89,7 @@ module.exports = configure((/* ctx */) => ({
 
         // you need to set i18n resource including paths !
         include: path.resolve(__dirname, './src/i18n/**'),
-      }]
+      }],
     ],
   },
 
