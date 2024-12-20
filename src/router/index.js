@@ -2,6 +2,7 @@ import { route } from 'quasar/wrappers';
 import {
   createRouter, createMemoryHistory, createWebHistory, createWebHashHistory,
 } from 'vue-router';
+import { useAuthStore } from 'src/stores/auth.js';
 import routes from './routes';
 
 /*
@@ -14,6 +15,7 @@ import routes from './routes';
  */
 
 export default route((/* { store, ssrContext } */) => {
+
   const createHistory = process.env.SERVER
     ? createMemoryHistory
     : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory);
@@ -28,5 +30,25 @@ export default route((/* { store, ssrContext } */) => {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
 
+  Router.beforeEach(async (to, from, next) => {
+
+    const authStore = useAuthStore();
+    if (!authStore.isAuthenticated) {
+
+      await authStore.checkAuth(); // Verifica a autenticação
+
+    }
+    if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+
+      next('/login'); // Redireciona para a página de login
+
+    } else {
+
+      next();
+
+    }
+
+  });
   return Router;
+
 });

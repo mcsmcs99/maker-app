@@ -1,4 +1,3 @@
-/* eslint-env node */
 
 /*
  * This file runs in a Node context (it's NOT transpiled by Babel), so use only
@@ -8,20 +7,10 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-/* eslint func-names: 0 */
-/* eslint global-require: 0 */
 const { configure } = require('quasar/wrappers');
 const path = require('path');
 
 module.exports = configure((/* ctx */) => ({
-  eslint: {
-    // fix: true,
-    // include: [],
-    // exclude: [],
-    // rawOptions: {},
-    warnings: true,
-    errors: true,
-  },
   // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
   // preFetch: true,
 

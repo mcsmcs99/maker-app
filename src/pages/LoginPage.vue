@@ -1,31 +1,54 @@
 <template>
-  <q-page class="flex flex-center">
-    <q-form class="row justify-center">
-      <p class="text-h5 text-center">
-        Login
-      </p>
-      <q-input
-        label="E-mail"
-        v-model="form.email"
-      />
+  <q-page>
+    <q-form @submit.prevent="handleLogin">
+      <q-input v-model="form.email" label="Email" />
+      <q-input v-model="form.password" label="Password" type="password" />
+      <q-btn type="submit" label="Login" />
     </q-form>
   </q-page>
 </template>
 
 <script>
-import { ref, defineComponent } from 'vue';
+import { ref } from 'vue'
+import { useGotoRouter } from 'src/utils/goToRouter'
+import { useAuthStore } from '../stores/auth'
 
-export default defineComponent({
-  name: 'LoginPage',
+export default {
   setup() {
-    const form = ref({
-      email: '',
-      password: '',
-    });
 
-    return {
-      form,
-    };
+    const authStore = useAuthStore()
+    const { handleGotoDashboard } = useGotoRouter()
+
+    const form = ref({ email: '', password: '' })
+    const handleLogin = async () => {
+
+      try {
+
+        const status = await authStore.loginUser(form.value.email, form.value.password)
+        if (status === 200) {
+
+          handleGotoDashboard()
+
+        } else if (status === 401) {
+
+          alert('E-mail ou senha incorretos!')
+
+        } else {
+
+          alert('Erro ao fazer o login!')
+
+        }
+
+      } catch (error) {
+
+        console.error('Erro ao fazer login:', error)
+
+      }
+
+    }
+
+    return { form, handleLogin }
+
   },
-});
+}
 </script>
