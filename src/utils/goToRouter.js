@@ -10,6 +10,12 @@ export function useGotoRouter() {
 
   }
 
+  const handleGotoCreateAccount = () => {
+
+    router.push('/create-account')
+
+  }
+
   const handleGotoDashboard = () => {
 
     router.push('/dashboard')
@@ -30,6 +36,7 @@ export function useGotoRouter() {
 
   return {
     handleGotoLogin,
+    handleGotoCreateAccount,
     handleGotoDashboard,
     handleGotoPage,
     handleGoToPageWithIdParams,

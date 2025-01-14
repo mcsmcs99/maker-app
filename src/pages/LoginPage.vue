@@ -4,6 +4,7 @@
       <q-input v-model="form.email" label="Email" />
       <q-input v-model="form.password" label="Password" type="password" />
       <q-btn type="submit" label="Login" />
+      <q-btn @click="handleGotoCreateAccount" label="Criar conta" />
     </q-form>
   </q-page>
 </template>
@@ -17,7 +18,7 @@ export default {
   setup() {
 
     const authStore = useAuthStore()
-    const { handleGotoDashboard } = useGotoRouter()
+    const { handleGotoDashboard, handleGotoCreateAccount } = useGotoRouter()
 
     const form = ref({ email: '', password: '' })
     const handleLogin = async () => {
@@ -47,7 +48,7 @@ export default {
 
     }
 
-    return { form, handleLogin }
+    return { form, handleLogin, handleGotoCreateAccount }
 
   },
 }

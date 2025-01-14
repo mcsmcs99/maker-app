@@ -5,6 +5,7 @@ const routes = [
     children: [
       { path: '', name: 'loginDefault', component: () => import('pages/LoginPage.vue') },
       { path: 'login', name: 'login', component: () => import('pages/LoginPage.vue') },
+      { path: 'create-account', name: 'create-account', component: () => import('pages/CreateAccountPage.vue') },
     ],
   },
   {

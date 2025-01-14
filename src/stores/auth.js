@@ -32,6 +32,19 @@ export const useAuthStore = defineStore('auth', {
       return response.data.data.code
 
     },
+    async register (form) {
+      try {
+
+        const response = await api.post('/register', form )
+        console.log(response)
+        return { code: response.status, data: response.data.data }
+        
+      } catch (error) {
+        console.log(error)
+        return { code: error.response.status, message: error.response.data?.message }
+
+      }
+    },
     async checkAuth() {
 
       try {
@@ -60,7 +73,7 @@ export const useAuthStore = defineStore('auth', {
       }
 
     },
-    logoutUser() {
+    async logoutUser() {
 
       localStorage.removeItem('token')
       this.authIsAuthenticated = false
