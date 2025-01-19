@@ -13,6 +13,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: 'dashboard', component: () => import('pages/IndexPage.vue') },
+      { path: 'my-account', component: () => import('pages/MyAccountPage.vue') },
     ],
   },
   // Always leave this as last one,
