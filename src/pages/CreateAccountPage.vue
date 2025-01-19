@@ -1,28 +1,30 @@
 <template>
   <q-page class="flex flex-center">
     <div class="q-pa-lg">
-      <div class="row q-col-gutter-md">
+      <div class="card-container">
         <!-- Opção 1: Consumidor -->
-        <q-card 
-          class="col-6" 
-          @click="selectOption(0)" 
-          bordered 
+        <q-card
+          class="custom-card"
+          :class="{ selected: selectedOption === 0 }"
+          @click="selectOption(0)"
+          bordered
           flat>
           <q-card-section class="text-center">
-            <q-icon name="person" size="48px" color="blue" />
-            <div class="q-mt-md">Cadastrar como Consumidor</div>
+            <q-icon name="person" size="48px" :color="selectedOption === 0 ? 'white' : 'blue'" />
+            <div class="q-mt-md">Consumidor</div>
           </q-card-section>
         </q-card>
 
         <!-- Opção 2: Empresário -->
-        <q-card 
-          class="col-6" 
-          @click="selectOption(1)" 
-          bordered 
+        <q-card
+          class="custom-card"
+          :class="{ selected: selectedOption === 1 }"
+          @click="selectOption(1)"
+          bordered
           flat>
           <q-card-section class="text-center">
-            <q-icon name="business" size="48px" color="green" />
-            <div class="q-mt-md">Cadastrar como Empresário</div>
+            <q-icon name="business" size="48px" :color="selectedOption === 1 ? 'white' : 'green'" />
+            <div class="q-mt-md">Empresário</div>
           </q-card-section>
         </q-card>
       </div>
@@ -35,14 +37,18 @@
           </q-card-section>
           <q-separator />
           <q-card-section>
-            <q-form @submit="submitForm">
+            <q-form @submit="submitForm" class="form-container">
               <!-- Campos básicos -->
-              <q-input filled v-model="formData.name" label="Nome" />
-              <q-input filled v-model="formData.email" label="E-mail" />
+              <q-input v-model="formData.name" outlined label="Nome" />
+              <q-input v-model="formData.whatsapp" outlined label="WhatsApp (Opcional)" mask="(##) #####-####" fill-mask />
+              <q-input v-model="formData.email" outlined label="E-mail" />
+              <q-input v-model="formData.confirmEmail" outlined label="Confirmar E-mail"
+               :rules="[validateConfirmEmail]" class="input-spacing"
+              />
 
               <!-- Campos específicos para Empresário -->
               <template v-if="formData.type === 1">
-                <q-input filled v-model="formData.company" label="Nome da Empresa" />
+                <q-input v-model="formData.company" outlined label="Nome da Empresa" />
                 <!-- Select para Segmentos -->
                 <q-select
                   v-model="formData.segment_id"
@@ -64,6 +70,7 @@
                   :disable="!formData.segment_id"
                 />
               </template>
+
               <!-- Campo de Senha -->
               <q-input
                 v-model="formData.password"
@@ -81,7 +88,7 @@
                   />
                 </template>
               </q-input>
-            
+
               <!-- Campo de Confirmação de Senha -->
               <q-input
                 v-model="formData.confirmPassword"
@@ -90,6 +97,7 @@
                 :type="showPassword ? 'text' : 'password'"
                 :rules="[validateConfirmPassword]"
                 clearable
+                class="input-spacing"
               >
                 <template v-slot:append>
                   <q-icon
@@ -195,7 +203,9 @@ const subSegments = ref([
 const showPassword = ref(false);
 const formData = ref({
   name: '',
+  whatsapp: '',
   email: '',
+  confirmEmail: '',
   company: '',
   password: '',
   confirmPassword: '',
@@ -204,7 +214,7 @@ const formData = ref({
   type: 0,
 });
 
-const formTitle = computed(() => 
+const formTitle = computed(() =>
 formData.value.type === 0
     ? 'Cadastro como Consumidor'
     : 'Cadastro como Empresário'
@@ -215,10 +225,6 @@ const filteredSubSegments = computed(() => {
     (subSegment) => subSegment.segmentId === parseInt(formData.value.segment_id)
   );
 });
-
-const selectOption = (option) => {
-  formData.value.type = option;
-};
 
 // Regras de validação
 const validatePassword = (val) => {
@@ -240,6 +246,9 @@ const validatePassword = (val) => {
     ? true
     : lengthRule || uppercaseRule || lowercaseRule || numberRule || specialCharRule;
 };
+
+const validateConfirmEmail = (val) =>
+  val === formData.value.email || "Os e-mails não coincidem.";
 
 const validateConfirmPassword = (val) =>
   val === formData.value.password || "As senhas não coincidem.";
@@ -271,4 +280,53 @@ const submitForm = async () => {
     alert("Por favor, corrija os erros antes de enviar.");
   }
 };
+
+const selectedOption = ref(0);
+// Função para rastrear a opção selecionada
+const selectOption = (option) => {
+  selectedOption.value = option;
+  formData.value.type = option;
+};
 </script>
+
+<style scoped>
+.card-container {
+  display: flex;
+  gap: 16px; /* Espaçamento entre os cartões */
+  justify-content: center; /* Centraliza os cartões */
+}
+
+.custom-card {
+  border-radius: 12px; /* Cantos arredondados */
+  background-color: white; /* Fundo necessário para destacar a sombra */
+  transition: transform 0.2s, box-shadow 0.2s; /* Animações suaves */
+  cursor: pointer;
+  width: 150px; /* Largura fixa, ajuste conforme necessário */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Sombra inicial */
+}
+
+.custom-card:hover {
+  transform: scale(1.05); /* Efeito de zoom ao passar o mouse */
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.3); /* Sombra mais forte ao passar o mouse */
+}
+
+.custom-card.selected {
+  background-color: #007bff; /* Cor de fundo para opção 0 */
+  color: white; /* Texto branco */
+}
+
+.custom-card.selected:nth-child(2) {
+  background-color: #28a745; /* Cor de fundo para opção 1 */
+  color: white; /* Texto branco */
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Espaço entre os campos */
+}
+
+/*.q-field--with-bottom {
+  padding-bottom: 0px;}*/
+
+</style>
